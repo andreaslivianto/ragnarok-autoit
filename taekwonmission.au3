@@ -1,5 +1,5 @@
 #Include <WinAPI.au3>
-
+#include <Constants.au3>
 HotKeySet("{ESC}", "stop")
 
 const $F1 = 112
@@ -30,7 +30,7 @@ func RestoreSP()
 	Sleep(100)
 ; Сидим, пока не восстановится СП
 	
-	while (PixelGetColor($WinCenterX+25, $WinCenterY+25) <> $Color)
+	while (PixelGetColor($WinCenterX+25, $WinCenterY+28) <> $Color)
 		sleep(1000)
 	wend
 	
@@ -40,36 +40,18 @@ EndFunc
 func TaekwonMission()
 	_WinAPI_PostMessage($Handle, 0x0100, $Ins,0) ;Нажимаем Ins, чтоб встать
 	Sleep(100)
-	_WinAPI_PostMessage($Handle, 0x0100, $F5, 0);пускаем скил чтоб сверять мобов
-	sleep(1500)
-	$RectCS = PixelChecksum($WinCenterX+80, $Top+75, $WinCenterX+160, $Top+85)
-	
-	while 1=1
-		_WinAPI_PostMessage($Handle, 0x0100, $F5, 0)
+
+    while (PixelGetColor($WinCenterX-25, $WinCenterY+28) = $Color)
+		_WinAPI_PostMessage($Handle, 0x0100, $F9, 0)
 		sleep(1000)
-		if ((PixelGetColor($WinCenterX-28, $WinCenterY+25) <> $Color) or (PixelChecksum($WinCenterX+80, $Top+75, $WinCenterX+160, $Top+85) <> $RectCS)) Then
-			ExitLoop
-		endif	
-		
-		
-	wend 
-	
-	if PixelChecksum($WinCenterX+80, $Top+75, $WinCenterX+160, $Top+85) <> $RectCS then
-		Stop()
-	EndIf
+	wend
 	
 EndFunc
 
-$hList = _WinAPI_EnumWindows()
-; Получаем хэндл окна рагны
-For $i = 1 To $hList[0][0]
-	If (StringLeft ($hList[$I][1],6) = 'Eterni') Then 
-		$Handle = $hList[$I][0]
-		ExitLoop
-	EndIf	
-Next
 
-MsgBox(0,'',$Handle)
+$Handle = 0x5040C
+
+
 
 ;Получаем размеры окна
 $TRect = _WinAPI_GetWindowRect($Handle)
@@ -79,30 +61,21 @@ $Left = DllStructGetData($tRect, "Left")
 $Right = DllStructGetData($tRect, "Right")
 $Bottom = DllStructGetData($tRect, "Bottom")
 
+;_WinAPI_SetWindowPos($Handle, $HWND_TOPMOST, $Left, $Left, $Right-$Left + 1, $Bottom-$Top + 1, $SWP_SHOWWINDOW);
+
+
+
 $WinCenterX = $Left + ($Right - $Left)/2
 $WinCenterY = $Top + ($Bottom - $Top)/2
 
-_WinAPI_PostMessage($Handle, 0x0100, $F5, 0);пускаем скил чтоб сверять мобов
-sleep(1500)
-$RectCS = PixelChecksum($WinCenterX+80, $Top+75, $WinCenterX+160, $Top+85)
-	
-_WinAPI_PostMessage($Handle, 0x0100, $F5, 0)
-sleep(1500)
+;mousemove($WinCenterX-30, $WinCenterY+28);
 
-msgbox(0,'', PixelChecksum($WinCenterX+80, $Top+75, $WinCenterX+160, $Top+85) <> $RectCS)
-		
+;exit;
 
-;msgbox(0,'',0x1863DE);
-;MouseMove($WinCenterX-28, $WinCenterY+25, 1)
-;sleep(2000)
-;MouseMove($WinCenterX+80, $Top+75, 1)
-;sleep(1000)
-;MouseMove($WinCenterX+160, $Top+85, 1)
-
-;while 1
-;sleep(2000)		
-;	RestoreSP();Сидим, пока не восстановится СП
+while 1
+sleep(2000)		
+	RestoreSP();Сидим, пока не восстановится СП
 	
-;	TaekwonMission(); вызываем скил пока не поменяется моб
+	TaekwonMission(); вызываем скил пока не поменяется моб
 	
-;wend
+wend
