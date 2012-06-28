@@ -9,9 +9,6 @@ Func _WinAPI_SetForegroundWindow($hWnd)
 	Return $aResult[0] <> 0
 EndFunc   ;==>_WinAPI_SetForegroundWindow
 
-
-
-
 local $w_Left = 1
 local $w_Top = 1
 
@@ -34,14 +31,14 @@ $hList = _WinAPI_EnumWindows()
 
 ;MsgBox(0,'выбор цвета'
 
-$handle = 0x30542
+$handle = 0xa03e6
 while 1
 ;For $i = 1 To $hList[0][0]
 ;	If (StringLeft ($hList[$I][1],6) = 'Eterni') Then 
+		$ActWndHandle = _WinAPI_GetForegroundWindow();
 		_WinAPI_ShowWindow($handle, 4)
 		$a = _WinAPI_SetForegroundWindow($handle)
-		msgbox(0,"",$a)
-		exit
+		
 		sleep(1000)
 		$tRect = _WinAPI_GetWindowRect($handle)
 		;MsgBox(0,'',$hList[$I][0])
@@ -51,7 +48,7 @@ while 1
 		;MouseMove($w_Right - 175,$w_top + 169,1) ; курсор должен переместиться на полоску с сытостью
 		;MsgBox(0, '', PixelGetColor($w_Right - 175,$w_top + 169));
 		;exit;
-		if PixelGetColor($w_Right - 175,$w_top + 169) = 0xFF0000 Then
+		while PixelGetColor($w_Right - 175,$w_top + 169) = 0xFF0000 
 			MouseMove($w_Right - 50,$w_top + 185,1); курсор должен переместиться на кнопку кормить те же координаты должны быть в ============     1     ===========
 			;exit
 			$k = 20
@@ -74,10 +71,10 @@ while 1
 				$k = $k - 1
 				sleep(1000)
 			WEnd
-		EndIf
+		wend
 ;	EndIf	
 		
 ;Next
-
+	_WinAPI_SetForegroundWindow($ActWndHandle)
 	Sleep(60*1000);
 WEnd	
