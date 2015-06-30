@@ -1,0 +1,1 @@
+програмки на Autoit для Ragnarok
